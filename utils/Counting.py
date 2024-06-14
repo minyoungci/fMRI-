@@ -1,7 +1,7 @@
 import os
 
 # 탐색할 루트 디렉토리 경로
-root_dir = '/home/minyoungxi/MINYOUNGXI/XFL/UKB_fmriprep_output'
+root_dir = '/home/minyoungxi/MINYOUNGXI/XFL/dbssus123-20240614_075307'
 
 # 'ses'로 시작하는 폴더를 가진 디렉토리를 저장할 리스트
 ses_directories = []
