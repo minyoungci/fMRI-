@@ -80,10 +80,9 @@ class OASIS(BaseDataset):
                 "target": target,
                 "TR": start_frame,
                 "sex": sex,
-                "session": os.path.basename(subject_path)  # 세션 정보 추가
+                "session": os.path.basename(subject_path)  
             }
 
-# 사용 예:
 root = '/home/minyoungxi/MINYOUNGXI/XFL/Data/OASIS_MNI_to_TRs_znorm'
 metadata_file = os.path.join(root, 'metadata', 'subject_metadata.json')
 

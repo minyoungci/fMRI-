@@ -10,11 +10,9 @@ def read_data(func_file, anat_file, load_root, save_root, subj_name, scaling_met
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
     try:
-        # Load functional data
         func_img = nib.load(func_path)
         func_data = func_img.get_fdata()
-        
-        # Load anatomical data
+
         anat_img = nib.load(anat_path)
         anat_data = torch.tensor(anat_img.get_fdata(), dtype=torch.float16, device=device)
     except Exception as e:
@@ -24,7 +22,6 @@ def read_data(func_file, anat_file, load_root, save_root, subj_name, scaling_met
     save_dir = os.path.join(save_root, subj_name)
     os.makedirs(save_dir, exist_ok=True)
     
-    # Process functional data in chunks
     for i in range(0, func_data.shape[-1], chunk_size):
         chunk = func_data[..., i:i+chunk_size]
         chunk_tensor = torch.tensor(chunk, dtype=torch.float16, device=device)
@@ -42,15 +39,12 @@ def read_data(func_file, anat_file, load_root, save_root, subj_name, scaling_met
         data_global[background] = data_temp[~background].min() if not fill_zeroback else 0 
         data_global[~background] = data_temp[~background]
 
-        # Save functional data
         for j, TR in enumerate(data_global.split(1, 3)):
             torch.save(TR.cpu().clone(), os.path.join(save_dir, f"func_frame_{i+j:04d}.pt"))
         
-        # Clear GPU memory
         del chunk_tensor, data_temp, data_global
         torch.cuda.empty_cache()
     
-    # Save anatomical data
     torch.save(anat_data.cpu(), os.path.join(save_dir, "anat.pt"))
 
     return subj_name
